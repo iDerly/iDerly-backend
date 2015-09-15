@@ -1,15 +1,13 @@
 <?php
 /*
-### Register
+### Add elder
 ```
-POST /caregiver/register
+POST /caregiver/add_elder
 ```
 
 #### Parameters
-* `email`
-* `password`
-* `name`
 * `user_id`
+* `caregiver_id`
 
 #### Return
 * `status`: 0 on success, -1 otherwise
@@ -18,25 +16,19 @@ POST /caregiver/register
 */
 $this->respond('POST', '/?', function ($request, $response, $service, $app) {
     $mysqli = $app->db;
-    $password = $mysqli->escape_string($request->param('password'));
-    $name = $mysqli->escape_string($request->param('name'));
-    $email = $mysqli->escape_string($request->param('email'));
     $user_id = $mysqli->escape_string($request->param('user_id'));
+    $caregiver_id = $mysqli->escape_string($request->param('caregiver_id'));
 
     // error checking
-    if (strlen($password) < 6)         $service->flash("Your password must be more than 6 characters.", 'error');
-    if (is_empty(trim($name)))         $service->flash("Please enter your full name.", 'error');
-    if (is_empty(trim($email)))        $service->flash("Please enter your e-mail address.", 'error');
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL))
-                                        $service->flash("Please enter a valid e-mail address.", 'error');
     if (is_empty(trim($user_id)))      $service->flash("Please enter your user_id.", 'error');
+    if (is_empty(trim($caregiver_id)))      $service->flash("Please enter your caregiver_id.", 'error');
 
 
     $num_rows = 0;
-    $sql_query = "SELECT * FROM `caregiver` WHERE `email` = ?";
+    $sql_query = "SELECT * FROM `take_care` WHERE `caregiver_id` = ? AND `user_id` = ?";
     $stmt = $mysqli->prepare($sql_query);
     if ($stmt) {
-        $stmt->bind_param("s", $email);
+        $stmt->bind_param("ii", $caregiver_id, $user_id);
         $res = $stmt->execute();
 
         $stmt->store_result();
@@ -44,27 +36,19 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
 
         $stmt->close();
     }
-    if ($num_rows === 1) {
-        $service->flash("E-mail already in use, please use another e-mail.", 'error');
+    if ($num_rows === 0) {
+        $service->flash("Relationship does not exist.", 'error');
     }
     $error_msg = $service->flashes('error');
 
     if (is_empty($error_msg)) {
-        $password = hash('sha512',hash('whirlpool', $password));
-        $sql_query = "INSERT INTO `caregiver`(`password`, `email`, `user_id`)
-                    VALUES(?, ?, ?)";
+        $sql_query = "DELETE FROM `take_care` WHERE `caregiver_id` = ? AND `user_id` = ?";
         $stmt = $mysqli->prepare($sql_query);
         if ($stmt) {
-            $stmt->bind_param("ssi", $password, $email, $user_id);
+            $stmt->bind_param("ii", $caregiver_id, $user_id);
             $res = $stmt->execute();
-
-            $sql_query = "UPDATE `user` SET `name` = ? WHERE `id` = ?";
-            $stmt = $mysqli->prepare($sql_query);
-            $stmt->bind_param("si", $name, $user_id);
-            $res = $stmt->execute();
-
             if ($res) {
-                $service->flash("Caregiver successfully registered.", 'success');
+                $service->flash("Elder successfully removed from the care of caregiver.", 'success');
                 $return['status'] = 0;
                 $return['message'] = $service->flashes('success');
             } else {

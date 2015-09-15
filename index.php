@@ -79,7 +79,7 @@ $klein->respond(function ($request, $response, $service, $app) use ($klein) {
     // Attachment folder
     $app->upload_dir = isset($_SERVER['OPENSHIFT_DATA_DIR']) ?  $_SERVER['OPENSHIFT_DATA_DIR'].'/attachments/' : __DIR__.'/attachments/';
 });
-foreach(array('register', 'login', 'logout'/*, 'add_elder', 'delete_elder'*/) as $controller) {
+foreach(array('register', 'login', 'logout', 'add_elder', 'delete_elder') as $controller) {
     $klein->with("/caregiver/$controller", "caregiver/$controller.php");
 }
 foreach(array('auth'/*, 'update', 'add_photo', 'delete_photo'*/) as $controller) {
