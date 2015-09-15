@@ -36,16 +36,13 @@ $klein->respond(function ($request, $response, $service, $app) use ($klein) {
         // Authentication required for these actions:
         search_array($request->pathname(),
         array(
-            '/caregiver/update',
             '/caregiver/logout',
-            '/caregiver/edit',
-            '/caregiver/add',
-            '/caregiver/delete',
-            '/contact/add',
-            '/contact/edit',
-            '/contact/delete',
-            '/report',
-            '/game'
+            '/caregiver/add_elder',
+            '/caregiver/delete_elder',
+            '/elder/update',
+            '/elder/add_photo',
+            '/elder/delete_photo',
+            '/result'
             )
         , TRUE) && 
         // No authentication required for these actions:
@@ -82,14 +79,20 @@ $klein->respond(function ($request, $response, $service, $app) use ($klein) {
     // Attachment folder
     $app->upload_dir = isset($_SERVER['OPENSHIFT_DATA_DIR']) ?  $_SERVER['OPENSHIFT_DATA_DIR'].'/attachments/' : __DIR__.'/attachments/';
 });
-foreach(array('register', 'login', 'update', 'logout', 'edit', 'add', 'delete') as $controller) {
+foreach(array('register', 'login', 'logout'/*, 'add_elder', 'delete_elder'*/) as $controller) {
     $klein->with("/caregiver/$controller", "caregiver/$controller.php");
 }
-foreach(array('edit', 'add', 'delete') as $controller) {
-    $klein->with("/contact/$controller", "appointment/$controller.php");
+foreach(array('auth'/*, 'update', 'add_photo', 'delete_photo'*/) as $controller) {
+    $klein->with("/elder/$controller", "elder/$controller.php");
 }
-$klein->with("/elder/auth", "elder/auth.php");
-$klein->with("/report", "report.php");
-$klein->with("/game", "game.php");
-
+/*
+foreach(array('register', 'login', 'logout', 'add_elder', 'delete_elder') as $controller) {
+    $klein->with("/caregiver/$controller", "caregiver/$controller.php");
+}
+foreach(array('auth', 'update', 'add_photo', 'delete_photo') as $controller) {
+    $klein->with("/elder/$controller", "elder/$controller.php");
+}
+$klein->with("/elder", "elder/elder.php");
+$klein->with("/result", "result.php");
+*/
 $klein->dispatch();
