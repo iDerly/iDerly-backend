@@ -51,6 +51,7 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
 
     if (is_empty($error_msg)) {
         $password = hash('sha512',hash('whirlpool', $password));
+
         $sql_query = "INSERT INTO `caregiver`(`password`, `email`, `user_id`)
                     VALUES(?, ?, ?)";
         $stmt = $mysqli->prepare($sql_query);

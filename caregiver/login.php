@@ -27,7 +27,8 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
 
     if (is_empty($error_msg)) {
         $password = hash('sha512',hash('whirlpool', $password));
-        $sql_query = "SELECT `id`, `type` FROM `user` WHERE `email` = ? AND `password` = ?  LIMIT 0,1";
+
+        $sql_query = "SELECT `user_id` FROM `caregiver` WHERE `email` = ? AND `password` = ?  LIMIT 0,1";
         $stmt = $mysqli->prepare($sql_query);
         $num_rows = 0;
         if ($stmt) {
