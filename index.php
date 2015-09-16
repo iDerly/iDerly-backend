@@ -82,7 +82,7 @@ $klein->respond(function ($request, $response, $service, $app) use ($klein) {
 foreach(array('register', 'login', 'logout', 'add_elder', 'delete_elder') as $controller) {
     $klein->with("/caregiver/$controller", "caregiver/$controller.php");
 }
-foreach(array('auth'/*, 'update'*/, 'add_photo', 'delete_photo') as $controller) {
+foreach(array('auth'/*, 'update'*/, 'add_photo', 'delete_photo', 'photos') as $controller) {
     $klein->with("/elder/$controller", "elder/$controller.php");
 }
 /*
