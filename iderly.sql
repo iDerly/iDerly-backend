@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 15, 2015 at 09:40 AM
+-- Generation Time: Sep 16, 2015 at 08:21 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -39,10 +39,12 @@ CREATE TABLE IF NOT EXISTS `caregiver` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Truncate table before insert `caregiver`
+-- Dumping data for table `caregiver`
 --
 
-TRUNCATE TABLE `caregiver`;
+INSERT INTO `caregiver` (`user_id`, `email`, `password`, `date_created`) VALUES
+(1, 'kenrick95@gmail.com', 'adb44ba036f0dc29d00b6e488aebdb20e1f179e0c61242842e705fa1cc377802a46f5b3f5bb7c48a8b9aac6e67af1082f7bddf071e95b63c8c7fdb0affe13003', '2015-09-15 17:54:32');
+
 --
 -- Triggers `caregiver`
 --
@@ -70,11 +72,6 @@ CREATE TABLE IF NOT EXISTS `game_result` (
   UNIQUE KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
---
--- Truncate table before insert `game_result`
---
-
-TRUNCATE TABLE `game_result`;
 --
 -- Triggers `game_result`
 --
@@ -108,20 +105,55 @@ CREATE TABLE IF NOT EXISTS `photo` (
   `user_id` int(64) NOT NULL,
   `date_created` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  KEY `user_id_2` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
--- Truncate table before insert `photo`
+-- Dumping data for table `photo`
 --
 
-TRUNCATE TABLE `photo`;
+INSERT INTO `photo` (`id`, `attachment`, `user_id`, `date_created`) VALUES
+(3, '12345', 2, '2015-09-15 21:40:16'),
+(4, '123456', 2, '2015-09-15 21:40:17');
+
 --
 -- Triggers `photo`
 --
 DROP TRIGGER IF EXISTS `photo_on_insert`;
 DELIMITER //
 CREATE TRIGGER `photo_on_insert` BEFORE INSERT ON `photo`
+ FOR EACH ROW IF NEW.date_created = 0 THEN SET NEW.date_created = NOW(); END IF
+//
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `take_care`
+--
+
+DROP TABLE IF EXISTS `take_care`;
+CREATE TABLE IF NOT EXISTS `take_care` (
+  `user_id` int(64) NOT NULL,
+  `caregiver_id` int(64) NOT NULL,
+  `date_created` datetime NOT NULL,
+  UNIQUE KEY `caregiver_id` (`caregiver_id`),
+  UNIQUE KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `take_care`
+--
+
+INSERT INTO `take_care` (`user_id`, `caregiver_id`, `date_created`) VALUES
+(2, 1, '2015-09-16 14:02:08');
+
+--
+-- Triggers `take_care`
+--
+DROP TRIGGER IF EXISTS `take_care_on_insert`;
+DELIMITER //
+CREATE TRIGGER `take_care_on_insert` BEFORE INSERT ON `take_care`
  FOR EACH ROW IF NEW.date_created = 0 THEN SET NEW.date_created = NOW(); END IF
 //
 DELIMITER ;
@@ -143,16 +175,11 @@ CREATE TABLE IF NOT EXISTS `user` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
--- Truncate table before insert `user`
---
-
-TRUNCATE TABLE `user`;
---
 -- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`id`, `device_id`, `date_created`, `name`) VALUES
-(1, '12345', '2015-09-15 15:14:23', ''),
+(1, '12345', '2015-09-15 15:14:23', 'Kenrick'),
 (2, '123456', '0000-00-00 00:00:00', ''),
 (3, '1234321', '2015-09-15 15:29:40', '');
 
@@ -187,6 +214,13 @@ ALTER TABLE `game_result`
 --
 ALTER TABLE `photo`
   ADD CONSTRAINT `photo_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `take_care`
+--
+ALTER TABLE `take_care`
+  ADD CONSTRAINT `take_care_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `take_care_ibfk_2` FOREIGN KEY (`caregiver_id`) REFERENCES `caregiver` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
