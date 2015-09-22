@@ -1,12 +1,14 @@
 <?php
 /*
-### Authenticate
+### Update elder profile
 ```
-POST /elder/auth
+POST /elder/update
 ```
 
 #### Parameters
 * `device_id`
+* `attachment`: base-64 encoded string of the photo
+* `name`: name of user
 
 #### Return
 * `status`: 0 on success, -1 otherwise
@@ -16,6 +18,8 @@ POST /elder/auth
 $this->respond('POST', '/?', function ($request, $response, $service, $app) {
     $mysqli = $app->db;
     $device_id = $mysqli->escape_string($request->param('device_id'));
+    $name = $mysqli->escape_string($request->param('name'));
+    $attachment = $mysqli->escape_string($request->param('attachment'));
 
     // error checking
     if (is_empty(trim($device_id)))
@@ -34,20 +38,19 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
 
         $stmt->close();
     }
-    if ($num_rows === 1) {
-        $service->flash("Device_id already in use, please use another device_id.", 'error');
+    if ($num_rows !== 1) {
+        $service->flash("Device_id not registered.", 'error');
     }
     $error_msg = $service->flashes('error');
 
     if (is_empty($error_msg)) {
-        $sql_query = "INSERT INTO user(`device_id`)
-                    VALUES(?)";
+        $sql_query = "UPDATE `user` SET `name` = ?, `attachment` = ? WHERE `device_id` = ?";
         $stmt = $mysqli->prepare($sql_query);
         if ($stmt) {
-            $stmt->bind_param("s", $device_id);
+            $stmt->bind_param("sss", $name, $attachment, $device_id);
             $res = $stmt->execute();
             if ($res) {
-                $service->flash("User successfully registered.", 'success');
+                $service->flash("User successfully updated.", 'success');
                 $return['status'] = 0;
                 $return['message'] = $service->flashes('success');
             } else {

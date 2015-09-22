@@ -23,23 +23,22 @@ $this->respond('/[i:caregiver_id]', function ($request, $response, $service, $ap
     $error_msg = $service->flashes('error');
 
     if (is_empty($error_msg)) {
-        $sql_query = "SELECT `user`.`id`, `name`, `attachment`
+        $sql_query = "SELECT `user`.`device_id`, `user`.`name`, `user`.`attachment`
             FROM `photo`, `take_care`, `user`
             WHERE
                 `caregiver_id` = ? AND
-                `take_care`.`user_id` = `photo`.`user_id` AND
                 `take_care`.`user_id` = `user`.`id`
             LIMIT 0,100";
         $stmt = $mysqli->prepare($sql_query);
         $stmt->bind_param("i", $caregiver_id);
         $res = $stmt->execute();
         $stmt->store_result();
-        $stmt->bind_result($user_id, $name, $attachment);
+        $stmt->bind_result($device_id, $name, $attachment);
 
         $result = [];
         while ($stmt->fetch()) {
             array_push($result, array(
-                "user_id" => $user_id,
+                "device_id" => $device_id,
                 "name" => $name,
                 "attachment" => $attachment
             ));

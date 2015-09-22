@@ -1,6 +1,6 @@
 <?php
 /*
-### Get elder photos
+### Get photos stored by elders
 ```
 REQUEST /elder/photos/[i:user_id]
 ```
@@ -10,7 +10,7 @@ REQUEST /elder/photos/[i:user_id]
 
 #### Return
 * `status`: 0 on success, -1 otherwise
-* `message`: array of error messages; or list of base-64 encoded images
+* `message`: array of error messages; or list of (photo_id, base-64 encoded image, attachment, remarks, #appear, #correct)
 
 */
 $this->respond('/[i:user_id]', function ($request, $response, $service, $app) {
@@ -23,16 +23,23 @@ $this->respond('/[i:user_id]', function ($request, $response, $service, $app) {
     $error_msg = $service->flashes('error');
 
     if (is_empty($error_msg)) {
-        $sql_query = "SELECT `attachment` FROM `photo` WHERE `user_id` = ? LIMIT 0,100";
+        $sql_query = "SELECT `id`, `attachment`, `name`, `remarks`, `appear`, `correct` FROM `photo` WHERE `user_id` = ? LIMIT 0,1000";
         $stmt = $mysqli->prepare($sql_query);
         $stmt->bind_param("i", $user_id);
         $res = $stmt->execute();
         $stmt->store_result();
-        $stmt->bind_result($attachment);
+        $stmt->bind_result($photo_id, $attachment, $name, $remarks, $appear, $correct);
 
-        $return_attachment = [];
+        $return_msg = [];
         while ($stmt->fetch()) {
-            array_push($return_attachment, $attachment);
+            array_push($return_msg, array(
+                "photo_id" => $photo_id,
+                "attachment" => $attachment,
+                "name" => $name,
+                "remarks" => $remarks,
+                "appear" => $appear,
+                "correct" => $correct
+            ));
         }
 
 
@@ -45,7 +52,7 @@ $this->respond('/[i:user_id]', function ($request, $response, $service, $app) {
         // header('Content-Type: '. $mime_type);
         // return $img;
         $return['status'] = 0;
-        $return['message'] = $return_attachment;
+        $return['message'] = $return_msg;
         return json_encode($return);
 
     } else {
