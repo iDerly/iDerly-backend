@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 16, 2015 at 08:21 AM
+-- Generation Time: Sep 22, 2015 at 10:59 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -70,7 +70,14 @@ CREATE TABLE IF NOT EXISTS `game_result` (
   `user_id` int(64) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `game_result`
+--
+
+INSERT INTO `game_result` (`id`, `time_start`, `time_end`, `score`, `user_id`) VALUES
+(1, '2015-01-01 12:00:00', '2015-01-01 12:05:00', 1, 1);
 
 --
 -- Triggers `game_result`
@@ -102,8 +109,12 @@ DROP TABLE IF EXISTS `photo`;
 CREATE TABLE IF NOT EXISTS `photo` (
   `id` int(64) NOT NULL AUTO_INCREMENT,
   `attachment` mediumtext NOT NULL COMMENT 'max 16MB',
-  `user_id` int(64) NOT NULL,
+  `user_id` int(64) NOT NULL COMMENT 'own by who',
   `date_created` datetime NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `remarks` varchar(255) NOT NULL,
+  `appear` int(64) NOT NULL,
+  `correct` int(64) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id_2` (`user_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
@@ -112,9 +123,9 @@ CREATE TABLE IF NOT EXISTS `photo` (
 -- Dumping data for table `photo`
 --
 
-INSERT INTO `photo` (`id`, `attachment`, `user_id`, `date_created`) VALUES
-(3, '12345', 2, '2015-09-15 21:40:16'),
-(4, '123456', 2, '2015-09-15 21:40:17');
+INSERT INTO `photo` (`id`, `attachment`, `user_id`, `date_created`, `name`, `remarks`, `appear`, `correct`) VALUES
+(3, '12345', 2, '2015-09-15 21:40:16', '', '', 0, 0),
+(4, '123456', 2, '2015-09-15 21:40:17', '', '', 0, 0);
 
 --
 -- Triggers `photo`
@@ -170,6 +181,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `device_id` varchar(255) NOT NULL,
   `date_created` datetime NOT NULL,
   `name` varchar(255) NOT NULL,
+  `attachment` mediumtext NOT NULL COMMENT 'user photo in base-64, optional',
   PRIMARY KEY (`id`),
   UNIQUE KEY `device_id` (`device_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
@@ -178,10 +190,10 @@ CREATE TABLE IF NOT EXISTS `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `device_id`, `date_created`, `name`) VALUES
-(1, '12345', '2015-09-15 15:14:23', 'Kenrick'),
-(2, '123456', '0000-00-00 00:00:00', ''),
-(3, '1234321', '2015-09-15 15:29:40', '');
+INSERT INTO `user` (`id`, `device_id`, `date_created`, `name`, `attachment`) VALUES
+(1, '12345', '2015-09-15 15:14:23', 'Kenrick2', ''),
+(2, '123456', '0000-00-00 00:00:00', '', ''),
+(3, '1234321', '2015-09-15 15:29:40', '', '');
 
 --
 -- Triggers `user`
