@@ -1,4 +1,5 @@
 # iDerly-backend
+[Documentation in Doxygen format](https://rawgit.com/iDerly/iDerly-backend/master/docs/html/index.html)
 
 ## REST API Entry Point
 
