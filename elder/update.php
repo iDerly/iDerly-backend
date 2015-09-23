@@ -1,18 +1,20 @@
 <?php
-/*
+/*! \file
+
 ### Update elder profile
+
 ```
 POST /elder/update
 ```
 
 #### Parameters
-* `device_id`
-* `attachment`: base-64 encoded string of the photo
-* `name`: name of user
+- `device_id`
+- `attachment`: base-64 encoded string of the photo
+- `name`: name of user
 
 #### Return
-* `status`: 0 on success, -1 otherwise
-* `message`: array of success/error messages
+- `status`: 0 on success, -1 otherwise
+- `message`: array of success/error messages
 
 */
 $this->respond('POST', '/?', function ($request, $response, $service, $app) {

@@ -1,17 +1,19 @@
 <?php
-/*
-### Add elder
+/*! \file
+
+### Delete elder
+
 ```
-POST /caregiver/add_elder
+POST /caregiver/delete_elder
 ```
 
 #### Parameters
-* `user_id`
-* `caregiver_id`
+- `user_id`
+- `caregiver_id`
 
 #### Return
-* `status`: 0 on success, -1 otherwise
-* `message`: array of success/error messages
+- `status`: 0 on success, -1 otherwise
+- `message`: array of success/error messages
 
 */
 $this->respond('POST', '/?', function ($request, $response, $service, $app) {

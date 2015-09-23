@@ -1,5 +1,5 @@
 <?php
-/**
+/** @file
  * config.php
  *
  * This file contains configuration for the application

@@ -1,16 +1,18 @@
 <?php
-/*
+/*! \file
+
 ### Get list of elders under care of caregiver, with their photos
+
 ```
 REQUEST /caregiver/view_elder_photo/[i:caregiver_id]
 ```
 
 #### Parameters
-* `caregiver_id`
+- `caregiver_id`
 
 #### Return
-* `status`: 0 on success, -1 otherwise
-* `message`: array of error messages; or list of elder under care of caregiver with its photos: [user_id, name, base-64 encoded image]
+- `status`: 0 on success, -1 otherwise
+- `message`: array of error messages; or list of elder under care of caregiver with its photos: [user_id, name, base-64 encoded image]
 
 */
 $this->respond('/[i:caregiver_id]', function ($request, $response, $service, $app) {

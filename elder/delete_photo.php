@@ -1,16 +1,18 @@
 <?php
-/*
+/*! \file
+
 ### Delete photo
+
 ```
 POST /elder/delete_photo
 ```
 
 #### Parameters
-* `id`: **photo id**
+- `id`: **photo id**
 
 #### Return
-* `status`: 0 on success, -1 otherwise
-* `message`: array of success/error messages
+- `status`: 0 on success, -1 otherwise
+- `message`: array of success/error messages
 
 */
 $this->respond('POST', '/?', function ($request, $response, $service, $app) {

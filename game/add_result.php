@@ -1,21 +1,23 @@
 <?php
-/*
+/*! \file
+
 ### Add game_result
+
 ```
 POST /game/add_result
 ```
 
 #### Parameters
-* `user_id`
-* `score`
-* `time_start` YYYY-MM-DD HH:mm:SS; `Y-M-D H:i:s`; 
-* `time_end` YYYY-MM-DD HH:mm:SS; `Y-M-D H:i:s`; 
-* `mode`: "classic" or "unlimited" 
-* ?????? [list of photo_id + boolean value stating correct or not]
+- `user_id`
+- `score`
+- `time_start` YYYY-MM-DD HH:mm:SS; `Y-M-D H:i:s`; 
+- `time_end` YYYY-MM-DD HH:mm:SS; `Y-M-D H:i:s`; 
+- `mode`: "classic" or "unlimited" 
+- ?????? [list of photo_id + boolean value stating correct or not]
 
 #### Return
-* `status`: 0 on success, -1 otherwise
-* `message`: array of success/error messages
+- `status`: 0 on success, -1 otherwise
+- `message`: array of success/error messages
 
 */
 $this->respond('POST', '/?', function ($request, $response, $service, $app) {

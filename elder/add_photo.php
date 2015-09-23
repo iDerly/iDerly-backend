@@ -1,19 +1,21 @@
 <?php
-/*
+/*! \file
+
 ### Add photo
+
 ```
 POST /elder/add_photo
 ```
 
 #### Parameters
-* `attachment`: base-64 encoded string of the photo
-* `user_id`: who owns the photo
-* `name`: name of person in photo (not user's name)
-* `remarks`: remarks of person in photo
+- `attachment`: base-64 encoded string of the photo
+- `user_id`: who owns the photo
+- `name`: name of person in photo (not user's name)
+- `remarks`: remarks of person in photo
 
 #### Return
-* `status`: 0 on success, -1 otherwise
-* `message`: array of success/error messages
+- `status`: 0 on success, -1 otherwise
+- `message`: array of success/error messages
 
 */
 $this->respond('POST', '/?', function ($request, $response, $service, $app) {

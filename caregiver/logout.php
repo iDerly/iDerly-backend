@@ -1,16 +1,18 @@
 <?php
-/*
+/*! \file
+
 ### Logout
+
 ```
 POST /caregiver/logout
 ```
 
 #### Parameters
-* `session_id`, returned at login
+- `session_id`, returned at login
 
 #### Return
-* `status`: 0 on success, -1 otherwise
-* `message`: array of success/error messages
+- `status`: 0 on success, -1 otherwise
+- `message`: array of success/error messages
 
 */
 $this->respond('POST', '/?', function ($request, $response, $service, $app) {

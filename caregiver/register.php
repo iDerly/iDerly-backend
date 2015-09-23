@@ -1,19 +1,21 @@
 <?php
-/*
+/*! \file
+
 ### Register
+
 ```
 POST /caregiver/register
 ```
 
 #### Parameters
-* `email`
-* `password`
-* `name`
-* `user_id`
+- `email`
+- `password`
+- `name`
+- `user_id`
 
 #### Return
-* `status`: 0 on success, -1 otherwise
-* `message`: array of success/error messages
+- `status`: 0 on success, -1 otherwise
+- `message`: array of success/error messages
 
 */
 $this->respond('POST', '/?', function ($request, $response, $service, $app) {

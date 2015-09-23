@@ -1,16 +1,18 @@
 <?php
-/*
+/*! \file
+
 ### Get photos stored by elders
+
 ```
 REQUEST /elder/photos/[i:user_id]
 ```
 
 #### Parameters
-* `user_id`
+- `user_id`
 
 #### Return
-* `status`: 0 on success, -1 otherwise
-* `message`: array of error messages; or list of (photo_id, base-64 encoded image, attachment, remarks, #appear, #correct)
+- `status`: 0 on success, -1 otherwise
+- `message`: array of error messages; or list of (photo_id, base-64 encoded image, attachment, remarks, #appear, #correct)
 
 */
 $this->respond('/[i:user_id]', function ($request, $response, $service, $app) {
