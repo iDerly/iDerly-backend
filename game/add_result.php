@@ -10,6 +10,7 @@ POST /game/add_result
 * `score`
 * `time_start` YYYY-MM-DD HH:mm:SS; `Y-M-D H:i:s`; 
 * `time_end` YYYY-MM-DD HH:mm:SS; `Y-M-D H:i:s`; 
+* `mode`: "classic" or "unlimited" 
 * ?????? [list of photo_id + boolean value stating correct or not]
 
 #### Return
@@ -23,10 +24,12 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
     $score = $mysqli->escape_string($request->param('score'));
     $time_start = $mysqli->escape_string($request->param('time_start'));
     $time_end = $mysqli->escape_string($request->param('time_end'));
+    $mode = $mysqli->escape_string($request->param('mode'));
 
     // error checking
     if (is_empty(trim($user_id)))    $service->flash("Please enter your user_id.", 'error');
     if (is_empty(trim($score)))      $service->flash("Please enter your score.", 'error');
+    if (is_empty(trim($mode)))      $service->flash("Please enter your mode.", 'error');
     
     if (is_empty(trim($time_start)))  $service->flash("Please enter the date and time of game start.", 'error');
     if (($timestamp_start = strtotime($time_start)) === false)
@@ -43,11 +46,11 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
     $error_msg = $service->flashes('error');
 
     if (is_empty($error_msg)) {
-        $sql_query = "INSERT INTO game_result(`time_start`, `time_end`, `score`, `user_id`)
+        $sql_query = "INSERT INTO game_result(`time_start`, `time_end`, `score`, `user_id`, `mode`)
                       VALUES(?, ?, ?, ?)";
         $stmt = $mysqli->prepare($sql_query);
         if ($stmt) {
-            $stmt->bind_param("ssii", $time_start, $time_end, $score, $user_id);
+            $stmt->bind_param("ssiis", $time_start, $time_end, $score, $user_id, $mode);
             $res = $stmt->execute();
             if ($res) {
                 $service->flash("Game result successfully stored.", 'success');

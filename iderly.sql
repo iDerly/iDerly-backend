@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 22, 2015 at 10:59 AM
+-- Generation Time: Sep 23, 2015 at 08:28 AM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -68,6 +68,7 @@ CREATE TABLE IF NOT EXISTS `game_result` (
   `time_end` datetime NOT NULL,
   `score` int(64) NOT NULL DEFAULT '0',
   `user_id` int(64) NOT NULL,
+  `mode` enum('classic','unlimited') NOT NULL DEFAULT 'classic',
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
@@ -76,8 +77,8 @@ CREATE TABLE IF NOT EXISTS `game_result` (
 -- Dumping data for table `game_result`
 --
 
-INSERT INTO `game_result` (`id`, `time_start`, `time_end`, `score`, `user_id`) VALUES
-(1, '2015-01-01 12:00:00', '2015-01-01 12:05:00', 1, 1);
+INSERT INTO `game_result` (`id`, `time_start`, `time_end`, `score`, `user_id`, `mode`) VALUES
+(1, '2015-01-01 12:00:00', '2015-01-01 12:05:00', 1, 1, 'classic');
 
 --
 -- Triggers `game_result`
