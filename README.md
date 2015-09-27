@@ -150,7 +150,7 @@ POST /elder/delete_photo
 ### Get list of elders under care of caregiver, with their photos
 
 ```
-REQUEST /caregiver/view_elder_photo/[i:caregiver_device_id]
+REQUEST /caregiver/view_elder_photo/[s:caregiver_device_id]
 ```
 
 #### Parameters
@@ -164,7 +164,7 @@ REQUEST /caregiver/view_elder_photo/[i:caregiver_device_id]
 ### View elder profile
 
 ```
-REQUEST /elder/view/[i:id]
+REQUEST /elder/view/[s:device_id]
 ```
 
 #### Parameters
@@ -194,7 +194,7 @@ POST /elder/update
 ### Get photos stored by elders
 
 ```
-REQUEST /elder/photos/[i:device_id]
+REQUEST /elder/photos/[s:device_id]
 ```
 
 #### Parameters

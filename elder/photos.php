@@ -4,7 +4,7 @@
 ### Get photos stored by elders
 
 ```
-REQUEST /elder/photos/[i:device_id]
+REQUEST /elder/photos/[s:device_id]
 ```
 
 #### Parameters
@@ -15,7 +15,7 @@ REQUEST /elder/photos/[i:device_id]
 - `message`: array of error messages; or list of (photo_id, base-64 encoded image, attachment, remarks, #appear, #correct)
 
 */
-$this->respond('/[i:device_id]', function ($request, $response, $service, $app) {
+$this->respond('/[s:device_id]', function ($request, $response, $service, $app) {
     $mysqli = $app->db;
     $user_id_from_device_id = $app->user_id_from_device_id;
     $device_id = $mysqli->escape_string($request->param('device_id'));

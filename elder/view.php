@@ -4,7 +4,7 @@
 ### View elder profile
 
 ```
-REQUEST /elder/view/[i:id]
+REQUEST /elder/view/[s:device_id]
 ```
 
 #### Parameters
@@ -15,7 +15,7 @@ REQUEST /elder/view/[i:id]
 - `message`: array of success/error messages
 
 */
-$this->respond('/[i:device_id]', function ($request, $response, $service, $app) {
+$this->respond('/[s:device_id]', function ($request, $response, $service, $app) {
     $mysqli = $app->db;
     $user_id_from_device_id = $app->user_id_from_device_id;
     $device_id = $mysqli->escape_string($request->param('device_id'));
