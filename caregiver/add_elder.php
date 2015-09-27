@@ -8,7 +8,7 @@ POST /caregiver/add_elder
 ```
 
 #### Parameters
-- `user_device_id`
+- `elder_device_id`
 - `caregiver_device_id`
 
 #### Return
@@ -19,11 +19,11 @@ POST /caregiver/add_elder
 $this->respond('POST', '/?', function ($request, $response, $service, $app) {
     $mysqli = $app->db;
     $user_id_from_device_id = $app->user_id_from_device_id;
-    $user_device_id = $mysqli->escape_string($request->param('user_device_id'));
+    $elder_device_id = $mysqli->escape_string($request->param('elder_device_id'));
     $caregiver_device_id = $mysqli->escape_string($request->param('caregiver_device_id'));
 
     // error checking
-    if (is_empty(trim($user_device_id)))      $service->flash("Please enter your user_device_id.", 'error');
+    if (is_empty(trim($elder_device_id)))      $service->flash("Please enter your elder_device_id.", 'error');
     if (is_empty(trim($caregiver_device_id)))      $service->flash("Please enter your caregiver_device_id.", 'error');
 
 
@@ -35,7 +35,7 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
         AND `user`.`id` = ?";
     $stmt = $mysqli->prepare($sql_query);
     if ($stmt) {
-        $stmt->bind_param("ss", $caregiver_device_id, $user_device_id);
+        $stmt->bind_param("ss", $caregiver_device_id, $elder_device_id);
         $res = $stmt->execute();
 
         $stmt->store_result();
@@ -54,11 +54,11 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
         $user_id = $user_id_from_device_id($mysqli, $caregiver_device_id);
         $caregiver_id = $user_id_from_device_id($mysqli, $caregiver_device_id);
         
-        $sql_query = "INSERT INTO take_care(`caregiver_device_id`, `user_device_id`)
+        $sql_query = "INSERT INTO take_care(`caregiver_device_id`, `elder_device_id`)
                       VALUES(?, ?)";
         $stmt = $mysqli->prepare($sql_query);
         if ($stmt) {
-            $stmt->bind_param("ii", $caregiver_device_id, $user_device_id);
+            $stmt->bind_param("ii", $caregiver_device_id, $elder_device_id);
             $res = $stmt->execute();
             if ($res) {
                 $service->flash("Elder successfully added for the care of caregiver.", 'success');

@@ -102,7 +102,8 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 <div class="title">iDerly-backend </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h2>REST API Entry Point</h2>
+<div class="textblock"><p><a href="https://rawgit.com/iDerly/iDerly-backend/master/docs/html/index.html">Documentation in Doxygen format</a></p>
+<h2>REST API Entry Point</h2>
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;https://iderly.kenrick95.org/</div>
 </div><!-- fragment --><p> OR </p><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;https://iderly-kenrick95.rhcloud.com/</div>
 </div><!-- fragment --><h2>Actions available</h2>
@@ -150,7 +151,7 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 <li><code>email</code></li>
 <li><code>password</code></li>
 <li><code>name</code></li>
-<li><code>user_id</code></li>
+<li><code>device_id</code></li>
 </ul>
 <h4>Return</h4>
 <ul>
@@ -161,8 +162,8 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;POST /caregiver/add_elder</div>
 </div><!-- fragment --><h4>Parameters</h4>
 <ul>
-<li><code>user_id</code></li>
-<li><code>caregiver_id</code></li>
+<li><code>elder_device_id</code></li>
+<li><code>caregiver_device_id</code></li>
 </ul>
 <h4>Return</h4>
 <ul>
@@ -173,8 +174,8 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;POST /caregiver/delete_elder</div>
 </div><!-- fragment --><h4>Parameters</h4>
 <ul>
-<li><code>user_id</code></li>
-<li><code>caregiver_id</code></li>
+<li><code>elder_device_id</code></li>
+<li><code>caregiver_device_id</code></li>
 </ul>
 <h4>Return</h4>
 <ul>
@@ -186,7 +187,7 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 </div><!-- fragment --><h4>Parameters</h4>
 <ul>
 <li><code>attachment</code>: base-64 encoded string of the photo</li>
-<li><code>user_id</code>: who owns the photo</li>
+<li><code>device_id</code>: who owns the photo</li>
 <li><code>name</code>: name of person in photo (not user's name)</li>
 <li><code>remarks</code>: remarks of person in photo</li>
 </ul>
@@ -207,21 +208,21 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 <li><code>message</code>: array of success/error messages</li>
 </ul>
 <h3>Get list of elders under care of caregiver, with their photos</h3>
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;REQUEST /caregiver/view_elder_photo/[i:caregiver_id]</div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;REQUEST /caregiver/view_elder_photo/[i:caregiver_device_id]</div>
 </div><!-- fragment --><h4>Parameters</h4>
 <ul>
-<li><code>caregiver_id</code></li>
+<li><code>caregiver_device_id</code></li>
 </ul>
 <h4>Return</h4>
 <ul>
 <li><code>status</code>: 0 on success, -1 otherwise</li>
-<li><code>message</code>: array of error messages; or list of elder under care of caregiver with its photos: [user_id, name, base-64 encoded image]</li>
+<li><code>message</code>: array of error messages; or list of elder under care of caregiver with its photos: [device_id, name, base-64 encoded image]</li>
 </ul>
 <h3>View elder profile</h3>
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;REQUEST /elder/view/[i:id]</div>
 </div><!-- fragment --><h4>Parameters</h4>
 <ul>
-<li><code>user_id</code></li>
+<li><code>device_id</code></li>
 </ul>
 <h4>Return</h4>
 <ul>
@@ -242,10 +243,10 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 <li><code>message</code>: array of success/error messages</li>
 </ul>
 <h3>Get photos stored by elders</h3>
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;REQUEST /elder/photos/[i:user_id]</div>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;REQUEST /elder/photos/[i:device_id]</div>
 </div><!-- fragment --><h4>Parameters</h4>
 <ul>
-<li><code>user_id</code></li>
+<li><code>device_id</code></li>
 </ul>
 <h4>Return</h4>
 <ul>
@@ -256,7 +257,7 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;POST /game/add_result</div>
 </div><!-- fragment --><h4>Parameters</h4>
 <ul>
-<li><code>user_id</code></li>
+<li><code>device_id</code></li>
 <li><code>score</code></li>
 <li><code>time_start</code> YYYY-MM-DD HH:mm:SS; <code>Y-M-D H:i:s</code>;</li>
 <li><code>time_end</code> YYYY-MM-DD HH:mm:SS; <code>Y-M-D H:i:s</code>;</li>

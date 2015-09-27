@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 23, 2015 at 08:28 AM
+-- Generation Time: Sep 27, 2015 at 01:36 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -43,7 +43,8 @@ CREATE TABLE IF NOT EXISTS `caregiver` (
 --
 
 INSERT INTO `caregiver` (`user_id`, `email`, `password`, `date_created`) VALUES
-(1, 'kenrick95@gmail.com', 'adb44ba036f0dc29d00b6e488aebdb20e1f179e0c61242842e705fa1cc377802a46f5b3f5bb7c48a8b9aac6e67af1082f7bddf071e95b63c8c7fdb0affe13003', '2015-09-15 17:54:32');
+(1, 'kenrick95@gmail.com', 'adb44ba036f0dc29d00b6e488aebdb20e1f179e0c61242842e705fa1cc377802a46f5b3f5bb7c48a8b9aac6e67af1082f7bddf071e95b63c8c7fdb0affe13003', '2015-09-15 17:54:32'),
+(11, 'test@test.com', 'adb44ba036f0dc29d00b6e488aebdb20e1f179e0c61242842e705fa1cc377802a46f5b3f5bb7c48a8b9aac6e67af1082f7bddf071e95b63c8c7fdb0affe13003', '2015-09-27 18:10:05');
 
 --
 -- Triggers `caregiver`
@@ -70,15 +71,18 @@ CREATE TABLE IF NOT EXISTS `game_result` (
   `user_id` int(64) NOT NULL,
   `mode` enum('classic','unlimited') NOT NULL DEFAULT 'classic',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `game_result`
 --
 
 INSERT INTO `game_result` (`id`, `time_start`, `time_end`, `score`, `user_id`, `mode`) VALUES
-(1, '2015-01-01 12:00:00', '2015-01-01 12:05:00', 1, 1, 'classic');
+(1, '2015-01-01 12:00:00', '2015-01-01 12:05:00', 1, 1, 'classic'),
+(2, '2015-01-01 10:00:00', '2015-01-01 10:20:00', 100, 10, 'unlimited'),
+(4, '2015-01-01 10:00:00', '2015-01-01 10:20:00', 100, 10, 'unlimited'),
+(5, '2015-01-01 10:00:00', '2015-01-01 10:20:00', 100, 10, 'unlimited');
 
 --
 -- Triggers `game_result`
@@ -118,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `photo` (
   `correct` int(64) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id_2` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `photo`
@@ -126,7 +130,8 @@ CREATE TABLE IF NOT EXISTS `photo` (
 
 INSERT INTO `photo` (`id`, `attachment`, `user_id`, `date_created`, `name`, `remarks`, `appear`, `correct`) VALUES
 (3, '12345', 2, '2015-09-15 21:40:16', '', '', 0, 0),
-(4, '123456', 2, '2015-09-15 21:40:17', '', '', 0, 0);
+(4, '123456', 2, '2015-09-15 21:40:17', '', '', 0, 0),
+(6, '1231231231231231231', 10, '2015-09-27 19:32:28', 'Tony', 'lol', 0, 0);
 
 --
 -- Triggers `photo`
@@ -185,7 +190,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `attachment` mediumtext NOT NULL COMMENT 'user photo in base-64, optional',
   PRIMARY KEY (`id`),
   UNIQUE KEY `device_id` (`device_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 --
 -- Dumping data for table `user`
@@ -194,7 +199,11 @@ CREATE TABLE IF NOT EXISTS `user` (
 INSERT INTO `user` (`id`, `device_id`, `date_created`, `name`, `attachment`) VALUES
 (1, '12345', '2015-09-15 15:14:23', 'Kenrick2', ''),
 (2, '123456', '0000-00-00 00:00:00', '', ''),
-(3, '1234321', '2015-09-15 15:29:40', '', '');
+(3, '1234321', '2015-09-15 15:29:40', '', ''),
+(4, '54321', '2015-09-23 14:52:10', '', ''),
+(5, '123451', '2015-09-27 17:56:23', '', ''),
+(10, '123456789', '2015-09-27 18:04:46', 'Tony', '1231231231231231231'),
+(11, '765432', '2015-09-27 18:05:49', 'Test', '');
 
 --
 -- Triggers `user`

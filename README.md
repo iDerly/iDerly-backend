@@ -77,7 +77,7 @@ POST /caregiver/register
 - `email`
 - `password`
 - `name`
-- `user_id`
+- `device_id`
 
 #### Return
 - `status`: 0 on success, -1 otherwise
@@ -92,8 +92,8 @@ POST /caregiver/add_elder
 ```
 
 #### Parameters
-- `user_id`
-- `caregiver_id`
+- `elder_device_id`
+- `caregiver_device_id`
 
 #### Return
 - `status`: 0 on success, -1 otherwise
@@ -107,8 +107,8 @@ POST /caregiver/delete_elder
 ```
 
 #### Parameters
-- `user_id`
-- `caregiver_id`
+- `elder_device_id`
+- `caregiver_device_id`
 
 #### Return
 - `status`: 0 on success, -1 otherwise
@@ -123,7 +123,7 @@ POST /elder/add_photo
 
 #### Parameters
 - `attachment`: base-64 encoded string of the photo
-- `user_id`: who owns the photo
+- `device_id`: who owns the photo
 - `name`: name of person in photo (not user's name)
 - `remarks`: remarks of person in photo
 
@@ -150,15 +150,15 @@ POST /elder/delete_photo
 ### Get list of elders under care of caregiver, with their photos
 
 ```
-REQUEST /caregiver/view_elder_photo/[i:caregiver_id]
+REQUEST /caregiver/view_elder_photo/[i:caregiver_device_id]
 ```
 
 #### Parameters
-- `caregiver_id`
+- `caregiver_device_id`
 
 #### Return
 - `status`: 0 on success, -1 otherwise
-- `message`: array of error messages; or list of elder under care of caregiver with its photos: [user_id, name, base-64 encoded image]
+- `message`: array of error messages; or list of elder under care of caregiver with its photos: [device_id, name, base-64 encoded image]
 
 
 ### View elder profile
@@ -168,7 +168,7 @@ REQUEST /elder/view/[i:id]
 ```
 
 #### Parameters
-- `user_id`
+- `device_id`
 
 #### Return
 - `status`: 0 on success, -1 otherwise
@@ -194,11 +194,11 @@ POST /elder/update
 ### Get photos stored by elders
 
 ```
-REQUEST /elder/photos/[i:user_id]
+REQUEST /elder/photos/[i:device_id]
 ```
 
 #### Parameters
-- `user_id`
+- `device_id`
 
 #### Return
 - `status`: 0 on success, -1 otherwise
@@ -212,7 +212,7 @@ POST /game/add_result
 ```
 
 #### Parameters
-- `user_id`
+- `device_id`
 - `score`
 - `time_start` YYYY-MM-DD HH:mm:SS; `Y-M-D H:i:s`; 
 - `time_end` YYYY-MM-DD HH:mm:SS; `Y-M-D H:i:s`; 
