@@ -4,27 +4,31 @@
 ### Get photos stored by elders
 
 ```
-REQUEST /elder/photos/[i:user_id]
+REQUEST /elder/photos/[i:device_id]
 ```
 
 #### Parameters
-- `user_id`
+- `device_id`
 
 #### Return
 - `status`: 0 on success, -1 otherwise
 - `message`: array of error messages; or list of (photo_id, base-64 encoded image, attachment, remarks, #appear, #correct)
 
 */
-$this->respond('/[i:user_id]', function ($request, $response, $service, $app) {
+$this->respond('/[i:device_id]', function ($request, $response, $service, $app) {
     $mysqli = $app->db;
-    $user_id = $mysqli->escape_string($request->param('user_id'));
+    $user_id_from_device_id = $app->user_id_from_device_id;
+    $device_id = $mysqli->escape_string($request->param('device_id'));
 
     // error checking
-    if (is_empty(trim($user_id)))     $service->flash("Please enter the user_id.", 'error');    
+    if (is_empty(trim($device_id)))     $service->flash("Please enter the device_id.", 'error');    
 
     $error_msg = $service->flashes('error');
 
     if (is_empty($error_msg)) {
+        // get user_id
+        $user_id = $user_id_from_device_id($mysqli, $device_id);
+
         $sql_query = "SELECT `id`, `attachment`, `name`, `remarks`, `appear`, `correct` FROM `photo` WHERE `user_id` = ? LIMIT 0,1000";
         $stmt = $mysqli->prepare($sql_query);
         $stmt->bind_param("i", $user_id);

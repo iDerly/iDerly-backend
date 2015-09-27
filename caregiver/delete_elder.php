@@ -8,8 +8,8 @@ POST /caregiver/delete_elder
 ```
 
 #### Parameters
-- `user_id`
-- `caregiver_id`
+- `user_device_id`
+- `caregiver_device_id`
 
 #### Return
 - `status`: 0 on success, -1 otherwise
@@ -18,19 +18,24 @@ POST /caregiver/delete_elder
 */
 $this->respond('POST', '/?', function ($request, $response, $service, $app) {
     $mysqli = $app->db;
-    $user_id = $mysqli->escape_string($request->param('user_id'));
-    $caregiver_id = $mysqli->escape_string($request->param('caregiver_id'));
+    $user_id_from_device_id = $app->user_id_from_device_id;
+    $user_device_id = $mysqli->escape_string($request->param('user_device_id'));
+    $caregiver_device_id = $mysqli->escape_string($request->param('caregiver_device_id'));
 
     // error checking
-    if (is_empty(trim($user_id)))      $service->flash("Please enter your user_id.", 'error');
-    if (is_empty(trim($caregiver_id)))      $service->flash("Please enter your caregiver_id.", 'error');
+    if (is_empty(trim($user_device_id)))      $service->flash("Please enter your user_device_id.", 'error');
+    if (is_empty(trim($caregiver_device_id)))      $service->flash("Please enter your caregiver_device_id.", 'error');
 
 
     $num_rows = 0;
-    $sql_query = "SELECT * FROM `take_care` WHERE `caregiver_id` = ? AND `user_id` = ?";
+    $sql_query = "SELECT * FROM `take_care`, `caregiver`, `user`
+        WHERE `caregiver_id` = `caregiver`.`user_id`
+        AND `caregiver`.`id` = ?
+        AND `user_id` = `user`.`id`
+        AND `user`.`id` = ?";
     $stmt = $mysqli->prepare($sql_query);
     if ($stmt) {
-        $stmt->bind_param("ii", $caregiver_id, $user_id);
+        $stmt->bind_param("ss", $caregiver_device_id, $user_device_id);
         $res = $stmt->execute();
 
         $stmt->store_result();
@@ -44,6 +49,11 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
     $error_msg = $service->flashes('error');
 
     if (is_empty($error_msg)) {
+        // get caregiver_id
+        // get user_id
+        $user_id = $user_id_from_device_id($mysqli, $caregiver_device_id);
+        $caregiver_id = $user_id_from_device_id($mysqli, $caregiver_device_id);
+
         $sql_query = "DELETE FROM `take_care` WHERE `caregiver_id` = ? AND `user_id` = ?";
         $stmt = $mysqli->prepare($sql_query);
         if ($stmt) {

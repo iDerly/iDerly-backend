@@ -12,7 +12,7 @@ POST /elder/auth
 
 #### Return
 - `status`: 0 on success, -1 otherwise
-- `message`: array of success/error messages
+- `message`: array of error messages; if success, returns session_id
 
 */
 $this->respond('POST', '/?', function ($request, $response, $service, $app) {
@@ -37,7 +37,15 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
         $stmt->close();
     }
     if ($num_rows === 1) {
-        $service->flash("Device_id already in use, please use another device_id.", 'error');
+        session_start();
+        $_SESSION['auth'] = TRUE;
+        $_SESSION['device_id'] = $device_id;
+
+        $service->flash(session_id(), 'success');
+        $return['status'] = 0;
+        $return['message'] = $service->flashes('success');
+        return json_encode($return);
+        //$service->flash("Device_id already in use, please use another device_id.", 'error');
     }
     $error_msg = $service->flashes('error');
 
@@ -49,7 +57,10 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
             $stmt->bind_param("s", $device_id);
             $res = $stmt->execute();
             if ($res) {
-                $service->flash("User successfully registered.", 'success');
+                $_SESSION['auth'] = TRUE;
+                $_SESSION['device_id'] = $device_id;
+
+                $service->flash(session_id(), 'success');
                 $return['status'] = 0;
                 $return['message'] = $service->flashes('success');
             } else {

@@ -8,24 +8,28 @@ REQUEST /elder/view/[i:id]
 ```
 
 #### Parameters
-- `user_id`
+- `device_id`
 
 #### Return
 - `status`: 0 on success, -1 otherwise
 - `message`: array of success/error messages
 
 */
-$this->respond('/[i:user_id]', function ($request, $response, $service, $app) {
+$this->respond('/[i:device_id]', function ($request, $response, $service, $app) {
     $mysqli = $app->db;
-    $user_id = $mysqli->escape_string($request->param('user_id'));
+    $user_id_from_device_id = $app->user_id_from_device_id;
+    $device_id = $mysqli->escape_string($request->param('device_id'));
 
     // error checking
-    if (is_empty(trim($user_id)))
-        $service->flash("Please enter your user_id.", 'error');
+    if (is_empty(trim($device_id)))
+        $service->flash("Please enter your device_id.", 'error');
 
     $error_msg = $service->flashes('error');
 
     if (is_empty($error_msg)) {
+        // get user_id
+        $user_id = $user_id_from_device_id($mysqli, $device_id);
+    
         $sql_query = "SELECT `device_id`, `date_created`, `name`, `attachment` FROM `user` WHERE `id` = ?";
         $stmt = $mysqli->prepare($sql_query);
         if ($stmt) {

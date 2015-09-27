@@ -8,7 +8,7 @@ POST /game/add_result
 ```
 
 #### Parameters
-- `user_id`
+- `device_id`
 - `score`
 - `time_start` YYYY-MM-DD HH:mm:SS; `Y-M-D H:i:s`; 
 - `time_end` YYYY-MM-DD HH:mm:SS; `Y-M-D H:i:s`; 
@@ -22,14 +22,15 @@ POST /game/add_result
 */
 $this->respond('POST', '/?', function ($request, $response, $service, $app) {
     $mysqli = $app->db;
-    $user_id = $mysqli->escape_string($request->param('user_id'));
+    $user_id_from_device_id = $app->user_id_from_device_id;
+    $device_id = $mysqli->escape_string($request->param('device_id'));
     $score = $mysqli->escape_string($request->param('score'));
     $time_start = $mysqli->escape_string($request->param('time_start'));
     $time_end = $mysqli->escape_string($request->param('time_end'));
     $mode = $mysqli->escape_string($request->param('mode'));
 
     // error checking
-    if (is_empty(trim($user_id)))    $service->flash("Please enter your user_id.", 'error');
+    if (is_empty(trim($device_id)))    $service->flash("Please enter your device_id.", 'error');
     if (is_empty(trim($score)))      $service->flash("Please enter your score.", 'error');
     if (is_empty(trim($mode)))      $service->flash("Please enter your mode.", 'error');
     
@@ -48,8 +49,12 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
     $error_msg = $service->flashes('error');
 
     if (is_empty($error_msg)) {
-        $sql_query = "INSERT INTO game_result(`time_start`, `time_end`, `score`, `user_id`, `mode`)
-                      VALUES(?, ?, ?, ?)";
+        // get user_id from device_id
+        $user_id = $user_id_from_device_id($mysqli, $device_id);
+
+
+        $sql_query = "INSERT INTO `game_result`(`time_start`, `time_end`, `score`, `user_id`, `mode`)
+                      VALUES(?, ?, ?, ?, ?)";
         $stmt = $mysqli->prepare($sql_query);
         if ($stmt) {
             $stmt->bind_param("ssiis", $time_start, $time_end, $score, $user_id, $mode);

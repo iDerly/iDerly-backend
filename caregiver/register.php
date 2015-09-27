@@ -11,7 +11,7 @@ POST /caregiver/register
 - `email`
 - `password`
 - `name`
-- `user_id`
+- `device_id`
 
 #### Return
 - `status`: 0 on success, -1 otherwise
@@ -20,10 +20,11 @@ POST /caregiver/register
 */
 $this->respond('POST', '/?', function ($request, $response, $service, $app) {
     $mysqli = $app->db;
+    $user_id_from_device_id = $app->user_id_from_device_id;
     $password = $mysqli->escape_string($request->param('password'));
     $name = $mysqli->escape_string($request->param('name'));
     $email = $mysqli->escape_string($request->param('email'));
-    $user_id = $mysqli->escape_string($request->param('user_id'));
+    $device_id = $mysqli->escape_string($request->param('device_id'));
 
     // error checking
     if (strlen($password) < 6)         $service->flash("Your password must be more than 6 characters.", 'error');
@@ -31,7 +32,7 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
     if (is_empty(trim($email)))        $service->flash("Please enter your e-mail address.", 'error');
     if (!filter_var($email, FILTER_VALIDATE_EMAIL))
                                         $service->flash("Please enter a valid e-mail address.", 'error');
-    if (is_empty(trim($user_id)))      $service->flash("Please enter your user_id.", 'error');
+    if (is_empty(trim($device_id)))      $service->flash("Please enter your device_id.", 'error');
 
 
     $num_rows = 0;
@@ -52,6 +53,9 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
     $error_msg = $service->flashes('error');
 
     if (is_empty($error_msg)) {
+        // get user_id
+        $user_id = $user_id_from_device_id($mysqli, $device_id);
+        
         $password = hash('sha512',hash('whirlpool', $password));
 
         $sql_query = "INSERT INTO `caregiver`(`password`, `email`, `user_id`)

@@ -22,6 +22,18 @@ $klein->respond(function ($request, $response, $service, $app) use ($klein) {
         return new mysqli($db_host, $db_user, $db_pass, $db_name);
     });
 
+    $app->user_id_from_device_id = function ($mysqli, $device_id) {
+        $sql_query = "SELECT `id` FROM `user` WHERE `device_id` = ?";
+        $stmt = $mysqli->prepare($sql_query);
+        $stmt->bind_param("s", $device_id);
+        $res = $stmt->execute();
+        $stmt->store_result();
+        $stmt->bind_result($user_id);
+        $stmt->fetch();
+        //$stmt->close();
+        return $user_id;
+    };
+
     // Check if authenticated, for certain actions
     function search_array($search, $array) {
         foreach($array as $key => $value) {

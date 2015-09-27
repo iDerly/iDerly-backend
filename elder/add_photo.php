@@ -9,7 +9,7 @@ POST /elder/add_photo
 
 #### Parameters
 - `attachment`: base-64 encoded string of the photo
-- `user_id`: who owns the photo
+- `device_id`: who owns the photo
 - `name`: name of person in photo (not user's name)
 - `remarks`: remarks of person in photo
 
@@ -20,14 +20,15 @@ POST /elder/add_photo
 */
 $this->respond('POST', '/?', function ($request, $response, $service, $app) {
     $mysqli = $app->db;
+    $user_id_from_device_id = $app->user_id_from_device_id;
     $attachment = $mysqli->escape_string($request->param('attachment'));
-    $user_id = $mysqli->escape_string($request->param('user_id'));
+    $device_id = $mysqli->escape_string($request->param('device_id'));
     $name = $mysqli->escape_string($request->param('name'));
-    $remakrs = $mysqli->escape_string($request->param('remakrs'));
+    $remarks = $mysqli->escape_string($request->param('remarks'));
 
     // error checking
     if (is_empty(trim($attachment)))      $service->flash("Please enter your attachment.", 'error');
-    if (is_empty(trim($user_id)))      $service->flash("Please enter your user_id.", 'error');
+    if (is_empty(trim($device_id)))      $service->flash("Please enter your device_id.", 'error');
     if (is_empty(trim($name)))      $service->flash("Please enter your subject's name.", 'error');
     if (is_empty(trim($remarks)))      $service->flash("Please enter your subject's remarks.", 'error');
 
@@ -35,6 +36,11 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
     $error_msg = $service->flashes('error');
 
     if (is_empty($error_msg)) {
+        // get user_id
+        $user_id = $user_id_from_device_id($mysqli, $device_id);
+
+
+
         $sql_query = "INSERT INTO photo(`attachment`, `user_id`, `name`, `remarks`)
                       VALUES(?, ?, ?, ?)";
         $stmt = $mysqli->prepare($sql_query);

@@ -4,35 +4,38 @@
 ### Get list of elders under care of caregiver, with their photos
 
 ```
-REQUEST /caregiver/view_elder_photo/[i:caregiver_id]
+REQUEST /caregiver/view_elder_photo/[i:caregiver_device_id]
 ```
 
 #### Parameters
-- `caregiver_id`
+- `caregiver_device_id`
 
 #### Return
 - `status`: 0 on success, -1 otherwise
 - `message`: array of error messages; or list of elder under care of caregiver with its photos: [user_id, name, base-64 encoded image]
 
 */
-$this->respond('/[i:caregiver_id]', function ($request, $response, $service, $app) {
+$this->respond('/[i:caregiver_device_id]', function ($request, $response, $service, $app) {
     $mysqli = $app->db;
-    $caregiver_id = $mysqli->escape_string($request->param('caregiver_id'));
+    $user_id_from_device_id = $app->user_id_from_device_id;
+    $caregiver_device_id = $mysqli->escape_string($request->param('caregiver_device_id'));
 
     // error checking
-    if (is_empty(trim($caregiver_id)))     $service->flash("Please enter the caregiver_id.", 'error');    
+    if (is_empty(trim($caregiver_device_id)))     $service->flash("Please enter the caregiver_device_id.", 'error');    
 
     $error_msg = $service->flashes('error');
+    $user_id = $user_id_from_device_id($mysqli, $caregiver_device_id);
 
     if (is_empty($error_msg)) {
         $sql_query = "SELECT `user`.`device_id`, `user`.`name`, `user`.`attachment`
-            FROM `photo`, `take_care`, `user`
+            FROM `photo`, `take_care`, `user`, `user` AS `cuser`
             WHERE
-                `caregiver_id` = ? AND
-                `take_care`.`user_id` = `user`.`id`
+                `cuser`.`device_id` = ? AND
+                `take_care`.`user_id` = `user`.`id` AND
+                `cuser`.`id` = `take_care`.`caregiver_id`
             LIMIT 0,100";
         $stmt = $mysqli->prepare($sql_query);
-        $stmt->bind_param("i", $caregiver_id);
+        $stmt->bind_param("i", $caregiver_device_id);
         $res = $stmt->execute();
         $stmt->store_result();
         $stmt->bind_result($device_id, $name, $attachment);
