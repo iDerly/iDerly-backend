@@ -12,8 +12,7 @@ POST /game/add_result
 - `score`
 - `time_start` YYYY-MM-DD HH:mm:SS; `Y-M-D H:i:s`; 
 - `time_end` YYYY-MM-DD HH:mm:SS; `Y-M-D H:i:s`; 
-- `mode`: "classic" or "unlimited" 
-- ?????? [list of photo_id + boolean value stating correct or not]
+- `mode`: "classic" or "unlimited"
 
 #### Return
 - `status`: 0 on success, -1 otherwise

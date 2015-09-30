@@ -4,7 +4,7 @@
 ### Get list of elders under care of caregiver, with their (profile) photo
 
 ```
-REQUEST /caregiver/view_elder_photo/[s:caregiver_device_id]
+REQUEST /caregiver/view_caregiver_and_elder/[s:caregiver_device_id]
 ```
 
 #### Parameters
@@ -12,7 +12,8 @@ REQUEST /caregiver/view_elder_photo/[s:caregiver_device_id]
 
 #### Return
 - `status`: 0 on success, -1 otherwise
-- `message`: array of error messages; or list of elder under care of caregiver with its photos: [user_id, name, base-64 encoded image]
+- `message`: array of error messages; or list of elder under care of caregiver with their details: [user_id, name, base-64 encoded image]
+  - ***NOTE*** zero-th index indicates caregiver's details.
 
 */
 $this->respond('/[s:caregiver_device_id]', function ($request, $response, $service, $app) {
@@ -27,6 +28,25 @@ $this->respond('/[s:caregiver_device_id]', function ($request, $response, $servi
     $user_id = $user_id_from_device_id($mysqli, $caregiver_device_id);
 
     if (is_empty($error_msg)) {
+        $sql_query = "SELECT `device_id`, `name`, `attachment`
+            FROM `user`
+            WHERE `device_id` = ?";
+        $stmt = $mysqli->prepare($sql_query);
+        $stmt->bind_param("i", $caregiver_device_id);
+        $res = $stmt->execute();
+        $stmt->store_result();
+        $stmt->bind_result($device_id, $name, $attachment);
+
+        $result = [];
+        $stmt->fetch();
+
+        array_push($result, array(
+            "device_id" => $device_id,
+            "name" => $name,
+            "attachment" => $attachment
+        ));
+    
+
         $sql_query = "SELECT `user`.`device_id`, `user`.`name`, `user`.`attachment`
             FROM `photo`, `take_care`, `user`, `user` AS `cuser`
             WHERE
