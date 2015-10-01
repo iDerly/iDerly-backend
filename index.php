@@ -120,13 +120,13 @@ $klein->respond(function ($request, $response, $service, $app) use ($klein) {
     // Attachment folder
     $app->upload_dir = isset($_SERVER['OPENSHIFT_DATA_DIR']) ?  $_SERVER['OPENSHIFT_DATA_DIR'].'/attachments/' : __DIR__.'/attachments/';
 });
-foreach(array('register', 'login', 'logout', 'add_elder', 'delete_elder', 'view_elder_photo', 'view_caregiver_and_elder', 'forget', 'reset') as $controller) {
+foreach(array('register', 'login', 'logout', 'add_elder', 'delete_elder', 'view_elder_photo', 'view_caregiver_and_elder', 'forgot', 'reset') as $controller) {
     $klein->with("/caregiver/$controller", "caregiver/$controller.php");
 }
 foreach(array('auth', 'update', 'add_photo', 'update_photo', 'delete_photo', 'photos', 'view') as $controller) {
     $klein->with("/elder/$controller", "elder/$controller.php");
 }
-foreach(array('add_result') as $controller) {
+foreach(array('add_result', 'inc_photo_stats') as $controller) {
     $klein->with("/game/$controller", "game/$controller.php");
 }
 /*

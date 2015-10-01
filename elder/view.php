@@ -30,23 +30,27 @@ $this->respond('/[s:device_id]', function ($request, $response, $service, $app) 
     $error_msg = $service->flashes('error');
 
     if (is_empty($error_msg)) {
-        // get user_id
-        $user_id = $user_id_from_device_id($mysqli, $device_id);
-    
-        $sql_query = "SELECT `device_id`, `date_created`, `name`, `attachment` FROM `user` WHERE `id` = ?";
+        $sql_query = "SELECT `user_id`, `device_id`, `date_created`, `name`, `attachment` FROM `user` WHERE `device_id` = ?";
         $stmt = $mysqli->prepare($sql_query);
         if ($stmt) {
-            $stmt->bind_param("i", $user_id);
+            $stmt->bind_param("s", $device_id);
             $res = $stmt->execute();
             $stmt->store_result();
-            $stmt->bind_result($device_id, $date_created, $name, $attachment);
+            $stmt->bind_result($user_id, $device_id, $date_created, $name, $attachment);
             $stmt->fetch();
 
             $return_msg = array(
+                "user_id" => $user_id,
                 "device_id" => $device_id,
                 "date_created" => $date_created,
                 "name" => $name,
-                "attachment" => $attachment
+                "attachment" => $attachment,
+                "game_hiscore" => $game['hiscore'],
+                "game_hiscore_classic" => $game['hiscore_classic'],
+                "game_hiscore_unlimited" => $game['hiscore_unlimited'],
+                "game_lastplayed_classic" => $game['lastplayed_classic'],
+                "game_lastplayed_unlimited" => $game['lastplayed_unlimited'],
+                "game_avgscore" => $game['avgscore']
             );
 
             $stmt->close();

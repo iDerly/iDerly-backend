@@ -1,8 +1,8 @@
 <?php
 /*
-### Forget password
+### Forgot password
 ```
-POST /user/forget
+POST /user/forgot
 ```
 
 #### Parameters

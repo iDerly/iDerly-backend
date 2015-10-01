@@ -44,7 +44,7 @@ $this->respond('GET', '/[s:password_token]', function ($request, $response, $ser
                 // update the password
                 $password_plain = substr(hash('whirlpool', $token_expiry . $password_token), rand(0, 20), 10);
                 $password = hash('sha512', hash('whirlpool', $password_plain));
-                $sql_query = "UPDATE `caregiver` SET `password` = ?, `token_expiry` = ?, `password_token` = ? WHERE `id` = ?";
+                $sql_query = "UPDATE `caregiver` SET `password` = ?, `token_expiry` = ?, `password_token` = ? WHERE `user_id` = ?";
                 $stmt = $mysqli->prepare($sql_query);
                 if ($stmt) {
                     // Invalidate the token
@@ -85,7 +85,7 @@ $this->respond('GET', '/[s:password_token]', function ($request, $response, $ser
         $return['status'] = -1;
         $return['message'] = $error_msg;
     }
-    $service->render('user/reset.phtml', array('return' => $return));
+    $service->render('caregiver/reset.phtml', array('return' => $return));
 
     //return json_encode($return);
 });
