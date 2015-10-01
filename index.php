@@ -22,6 +22,35 @@ $klein->respond(function ($request, $response, $service, $app) use ($klein) {
         return new mysqli($db_host, $db_user, $db_pass, $db_name);
     });
 
+    // Mail helper
+    $app->register('mail', function () {
+        $mail = new PHPMailer;
+        global $smtp_host;
+        global $smtp_auth;
+        global $smtp_username;
+        global $smtp_password ;
+        global $smtp_secure;
+        global $smtp_port;
+        global $smtp_from;
+        global $smtp_from_name;
+
+        $mail->isSMTP(); // Set mailer to use SMTP
+        $mail->Host = $smtp_host;
+        $mail->SMTPAuth = $smtp_auth;
+        $mail->Username = $smtp_username;
+        $mail->Password = $smtp_password;
+        $mail->SMTPSecure = $smtp_secure; 
+        $mail->Port = $smtp_port;
+        $mail->From = $smtp_from;
+        $mail->FromName = $smtp_from_name;
+        $mail->addReplyTo($smtp_from, $smtp_from_name);
+
+        $mail->isHTML(true); // Set email format to HTML
+
+        return $mail;
+    });
+
+
     $app->user_id_from_device_id = function ($mysqli, $device_id) {
         $sql_query = "SELECT `id` FROM `user` WHERE `device_id` = ?";
         $stmt = $mysqli->prepare($sql_query);
@@ -91,7 +120,7 @@ $klein->respond(function ($request, $response, $service, $app) use ($klein) {
     // Attachment folder
     $app->upload_dir = isset($_SERVER['OPENSHIFT_DATA_DIR']) ?  $_SERVER['OPENSHIFT_DATA_DIR'].'/attachments/' : __DIR__.'/attachments/';
 });
-foreach(array('register', 'login', 'logout', 'add_elder', 'delete_elder', 'view_elder_photo', 'view_caregiver_and_elder') as $controller) {
+foreach(array('register', 'login', 'logout', 'add_elder', 'delete_elder', 'view_elder_photo', 'view_caregiver_and_elder', 'forget', 'reset') as $controller) {
     $klein->with("/caregiver/$controller", "caregiver/$controller.php");
 }
 foreach(array('auth', 'update', 'add_photo', 'update_photo', 'delete_photo', 'photos', 'view') as $controller) {

@@ -6,7 +6,7 @@ POST /user/forget
 ```
 
 #### Parameters
-* `email`
+* `device_id`
 
 #### Return
 * `status`: 0 on success, -1 otherwise
@@ -15,25 +15,27 @@ POST /user/forget
 */
 $this->respond('POST', '/?', function ($request, $response, $service, $app) {
     $mysqli = $app->db;
-    $email = $mysqli->escape_string($request->param('email'));
+    $user_id_from_device_id = $app->user_id_from_device_id;
 
-    if (is_empty(trim($email))
-        || !filter_var($email, FILTER_VALIDATE_EMAIL))
-                                $service->flash("Please enter a valid e-mail address.", 'error');
+    $device_id = $mysqli->escape_string($request->param('device_id'));
+
+    if (is_empty(trim($device_id)))
+                                $service->flash("Please enter the device_id.", 'error');
     $error_msg = $service->flashes('error');
 
     if (is_empty($error_msg)) {
-        $sql_query = "SELECT `id` FROM `user` WHERE `email` = ? LIMIT 0,1";
+        $user_id = $user_id_from_device_id($mysqli, $device_id);
+        $sql_query = "SELECT `email` FROM `caregiver` WHERE `user_id` = ? LIMIT 0,1";
         $stmt = $mysqli->prepare($sql_query);
         $num_rows = 0;
         if ($stmt) {
-            $stmt->bind_param("s", $email);
+            $stmt->bind_param("i", $user_id);
             $res = $stmt->execute();
 
             $stmt->store_result();
             $num_rows = $stmt->num_rows;
 
-            $stmt->bind_result($user_id);
+            $stmt->bind_result($email);
             $stmt->fetch();
 
             $stmt->close();
@@ -46,9 +48,9 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
             // Generate password token
             $token_expiry = date("Y-m-d H:i:s", mktime(date("H"), date("i"), date("s"), date("n"), date("j")+1, date("Y")));
             $password_token = substr(hash('whirlpool', $token_expiry . $email . $user_id . $email), rand(0, 10), 30);
-            $url = "http://iderly.kenrick95.org/caregiver/reset/$password_token"; //haven't been implemented yet
+            $url = "http://iderly.kenrick95.org/caregiver/reset/$password_token";
             // Store it at database
-            $sql_query = "UPDATE `user` SET `password_token` = ?, `token_expiry` = ? WHERE `id` = ?";
+            $sql_query = "UPDATE `caregiver` SET `password_token` = ?, `token_expiry` = ? WHERE `user_id` = ?";
             $stmt = $mysqli->prepare($sql_query);
             if ($stmt) {
                 $stmt->bind_param("ssi", $password_token, $token_expiry, $user_id);

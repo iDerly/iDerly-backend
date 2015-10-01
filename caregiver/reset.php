@@ -25,7 +25,7 @@ $this->respond('GET', '/[s:password_token]', function ($request, $response, $ser
     $error_msg = $service->flashes('error');
 
     if (is_empty($error_msg)) {
-        $sql_query = "SELECT `id`, `token_expiry` FROM `user` WHERE `password_token` = ? LIMIT 0,1";
+        $sql_query = "SELECT `user_id`, `token_expiry` FROM `caregiver` WHERE `password_token` = ? LIMIT 0,1";
         $stmt = $mysqli->prepare($sql_query);
         $num_rows = 0;
         if ($stmt) {
@@ -44,7 +44,7 @@ $this->respond('GET', '/[s:password_token]', function ($request, $response, $ser
                 // update the password
                 $password_plain = substr(hash('whirlpool', $token_expiry . $password_token), rand(0, 20), 10);
                 $password = hash('sha512', hash('whirlpool', $password_plain));
-                $sql_query = "UPDATE `user` SET `password` = ?, `token_expiry` = ?, `password_token` = ? WHERE `id` = ?";
+                $sql_query = "UPDATE `caregiver` SET `password` = ?, `token_expiry` = ?, `password_token` = ? WHERE `id` = ?";
                 $stmt = $mysqli->prepare($sql_query);
                 if ($stmt) {
                     // Invalidate the token
