@@ -182,11 +182,61 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 <li><code>status</code>: 0 on success, -1 otherwise</li>
 <li><code>message</code>: array of success/error messages</li>
 </ul>
+<h3>Forgot password</h3>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;POST /user/forgot</div>
+</div><!-- fragment --><h4>Parameters</h4>
+<ul>
+<li><code>device_id</code></li>
+</ul>
+<h4>Return</h4>
+<ul>
+<li><code>status</code>: 0 on success, -1 otherwise</li>
+<li><code>message</code>: array of error/success messages</li>
+</ul>
+<h3>Reset password</h3>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;GET /user/reset/[s:password_token]</div>
+</div><!-- fragment --><p> Users are expected to access this URL from e-mail sent by <code>/user/forget</code></p>
+<h4>Parameters</h4>
+<ul>
+<li><code>password_token</code>: Generated from <code>/user/forget</code></li>
+</ul>
+<h4>Return</h4>
+<ul>
+<li><code>status</code>: 0 on success, -1 otherwise</li>
+<li><code>message</code>: array of error/success messages</li>
+</ul>
+<h3>Get list of elders under care of caregiver, with their (profile) photo</h3>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;REQUEST /caregiver/view_caregiver_and_elder/[s:caregiver_device_id]</div>
+</div><!-- fragment --><h4>Parameters</h4>
+<ul>
+<li><code>caregiver_device_id</code></li>
+</ul>
+<h4>Return</h4>
+<ul>
+<li><code>status</code>: 0 on success, -1 otherwise</li>
+<li><code>message</code>: array of error messages; or list of elder under care of caregiver with their details: [user_id, name, base-64 encoded image]<ul>
+<li>***NOTE*** zero-th index indicates caregiver's details.</li>
+</ul>
+</li>
+</ul>
 <h3>Add photo</h3>
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;POST /elder/add_photo</div>
 </div><!-- fragment --><h4>Parameters</h4>
 <ul>
 <li><code>attachment</code>: base-64 encoded string of the photo</li>
+<li><code>device_id</code>: who owns the photo</li>
+<li><code>name</code>: name of person in photo (not user's name)</li>
+<li><code>remarks</code>: remarks of person in photo</li>
+</ul>
+<h4>Return</h4>
+<ul>
+<li><code>status</code>: 0 on success, -1 otherwise</li>
+<li><code>message</code>: array of success/error messages</li>
+</ul>
+<h3>Update photo</h3>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;POST /elder/update_photo</div>
+</div><!-- fragment --><h4>Parameters</h4>
+<ul>
 <li><code>device_id</code>: who owns the photo</li>
 <li><code>name</code>: name of person in photo (not user's name)</li>
 <li><code>remarks</code>: remarks of person in photo</li>
@@ -207,7 +257,7 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 <li><code>status</code>: 0 on success, -1 otherwise</li>
 <li><code>message</code>: array of success/error messages</li>
 </ul>
-<h3>Get list of elders under care of caregiver, with their photos</h3>
+<h3>Get list of elders under care of caregiver, with their (profile) photo</h3>
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;REQUEST /caregiver/view_elder_photo/[s:caregiver_device_id]</div>
 </div><!-- fragment --><h4>Parameters</h4>
 <ul>
@@ -216,7 +266,7 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 <h4>Return</h4>
 <ul>
 <li><code>status</code>: 0 on success, -1 otherwise</li>
-<li><code>message</code>: array of error messages; or list of elder under care of caregiver with its photos: [device_id, name, base-64 encoded image]</li>
+<li><code>message</code>: array of error messages; or list of elder under care of caregiver with its photos: [user_id, name, base-64 encoded image]</li>
 </ul>
 <h3>View elder profile</h3>
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;REQUEST /elder/view/[s:device_id]</div>
@@ -262,7 +312,22 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 <li><code>time_start</code> YYYY-MM-DD HH:mm:SS; <code>Y-M-D H:i:s</code>;</li>
 <li><code>time_end</code> YYYY-MM-DD HH:mm:SS; <code>Y-M-D H:i:s</code>;</li>
 <li><code>mode</code>: "classic" or "unlimited"</li>
-<li>?????? [list of photo_id + boolean value stating correct or not]</li>
+</ul>
+<h4>Return</h4>
+<ul>
+<li><code>status</code>: 0 on success, -1 otherwise</li>
+<li><code>message</code>: array of success/error messages</li>
+</ul>
+<h3>Increase photo statistics</h3>
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;POST /game/inc_photo_stats</div>
+</div><!-- fragment --><h4>Parameters</h4>
+<ul>
+<li><code>photo_id</code></li>
+<li><code>option</code>:<ul>
+<li>0: increment number of appearance ONLY</li>
+<li>1: increment number of appearance AND correctness</li>
+</ul>
+</li>
 </ul>
 <h4>Return</h4>
 <ul>

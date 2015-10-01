@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 27, 2015 at 01:36 PM
+-- Generation Time: Oct 01, 2015 at 03:46 PM
 -- Server version: 5.6.17
 -- PHP Version: 5.5.12
 
@@ -34,6 +34,8 @@ CREATE TABLE IF NOT EXISTS `caregiver` (
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `date_created` datetime NOT NULL,
+  `password_token` varchar(255) DEFAULT NULL,
+  `token_expiry` datetime DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -42,9 +44,9 @@ CREATE TABLE IF NOT EXISTS `caregiver` (
 -- Dumping data for table `caregiver`
 --
 
-INSERT INTO `caregiver` (`user_id`, `email`, `password`, `date_created`) VALUES
-(1, 'kenrick95@gmail.com', 'adb44ba036f0dc29d00b6e488aebdb20e1f179e0c61242842e705fa1cc377802a46f5b3f5bb7c48a8b9aac6e67af1082f7bddf071e95b63c8c7fdb0affe13003', '2015-09-15 17:54:32'),
-(11, 'test@test.com', 'adb44ba036f0dc29d00b6e488aebdb20e1f179e0c61242842e705fa1cc377802a46f5b3f5bb7c48a8b9aac6e67af1082f7bddf071e95b63c8c7fdb0affe13003', '2015-09-27 18:10:05');
+INSERT INTO `caregiver` (`user_id`, `email`, `password`, `date_created`, `password_token`, `token_expiry`) VALUES
+(1, 'kenrick95@gmail.com', 'adb44ba036f0dc29d00b6e488aebdb20e1f179e0c61242842e705fa1cc377802a46f5b3f5bb7c48a8b9aac6e67af1082f7bddf071e95b63c8c7fdb0affe13003', '2015-09-15 17:54:32', NULL, NULL),
+(11, 'test@test.com', 'adb44ba036f0dc29d00b6e488aebdb20e1f179e0c61242842e705fa1cc377802a46f5b3f5bb7c48a8b9aac6e67af1082f7bddf071e95b63c8c7fdb0affe13003', '2015-09-27 18:10:05', NULL, NULL);
 
 --
 -- Triggers `caregiver`
@@ -80,8 +82,8 @@ CREATE TABLE IF NOT EXISTS `game_result` (
 
 INSERT INTO `game_result` (`id`, `time_start`, `time_end`, `score`, `user_id`, `mode`) VALUES
 (1, '2015-01-01 12:00:00', '2015-01-01 12:05:00', 1, 1, 'classic'),
-(2, '2015-01-01 10:00:00', '2015-01-01 10:20:00', 100, 10, 'unlimited'),
-(4, '2015-01-01 10:00:00', '2015-01-01 10:20:00', 100, 10, 'unlimited'),
+(2, '2015-01-01 00:00:00', '2015-01-01 00:20:00', 1, 10, 'classic'),
+(4, '2015-01-01 10:30:00', '2015-01-01 10:40:00', 50, 10, 'unlimited'),
 (5, '2015-01-01 10:00:00', '2015-01-01 10:20:00', 100, 10, 'unlimited');
 
 --
@@ -129,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `photo` (
 --
 
 INSERT INTO `photo` (`id`, `attachment`, `user_id`, `date_created`, `name`, `remarks`, `appear`, `correct`) VALUES
-(3, '12345', 2, '2015-09-15 21:40:16', '', '', 0, 0),
+(3, '12345', 2, '2015-09-15 21:40:16', '', '', 1, 1),
 (4, '123456', 2, '2015-09-15 21:40:17', '', '', 0, 0),
 (6, '1231231231231231231', 10, '2015-09-27 19:32:28', 'Tony', 'lol', 0, 0);
 

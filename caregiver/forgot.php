@@ -1,6 +1,8 @@
 <?php
-/*
+/*! \file
+
 ### Forgot password
+
 ```
 POST /user/forgot
 ```

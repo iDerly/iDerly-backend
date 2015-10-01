@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['update_2ephp',['update.php',['../update_8php.html',1,'']]]
+  ['photos_2ephp',['photos.php',['../photos_8php.html',1,'']]]
 ];

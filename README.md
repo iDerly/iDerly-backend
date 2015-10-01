@@ -115,6 +115,50 @@ POST /caregiver/delete_elder
 - `message`: array of success/error messages
 
 
+### Forgot password
+
+```
+POST /user/forgot
+```
+
+#### Parameters
+* `device_id`
+
+#### Return
+* `status`: 0 on success, -1 otherwise
+* `message`: array of error/success messages
+
+### Reset password
+
+```
+GET /user/reset/[s:password_token]
+```
+Users are expected to access this URL from e-mail sent by `/user/forget`
+
+#### Parameters
+* `password_token`: Generated from `/user/forget`
+
+#### Return
+* `status`: 0 on success, -1 otherwise
+* `message`: array of error/success messages
+
+
+
+### Get list of elders under care of caregiver, with their (profile) photo
+
+```
+REQUEST /caregiver/view_caregiver_and_elder/[s:caregiver_device_id]
+```
+
+#### Parameters
+- `caregiver_device_id`
+
+#### Return
+- `status`: 0 on success, -1 otherwise
+- `message`: array of error messages; or list of elder under care of caregiver with their details: [user_id, name, base-64 encoded image]
+  - ***NOTE*** zero-th index indicates caregiver's details.
+
+
 ### Add photo
 
 ```
@@ -123,6 +167,22 @@ POST /elder/add_photo
 
 #### Parameters
 - `attachment`: base-64 encoded string of the photo
+- `device_id`: who owns the photo
+- `name`: name of person in photo (not user's name)
+- `remarks`: remarks of person in photo
+
+#### Return
+- `status`: 0 on success, -1 otherwise
+- `message`: array of success/error messages
+
+
+### Update photo
+
+```
+POST /elder/update_photo
+```
+
+#### Parameters
 - `device_id`: who owns the photo
 - `name`: name of person in photo (not user's name)
 - `remarks`: remarks of person in photo
@@ -147,7 +207,7 @@ POST /elder/delete_photo
 
 
 
-### Get list of elders under care of caregiver, with their photos
+### Get list of elders under care of caregiver, with their (profile) photo
 
 ```
 REQUEST /caregiver/view_elder_photo/[s:caregiver_device_id]
@@ -158,7 +218,7 @@ REQUEST /caregiver/view_elder_photo/[s:caregiver_device_id]
 
 #### Return
 - `status`: 0 on success, -1 otherwise
-- `message`: array of error messages; or list of elder under care of caregiver with its photos: [device_id, name, base-64 encoded image]
+- `message`: array of error messages; or list of elder under care of caregiver with its photos: [user_id, name, base-64 encoded image]
 
 
 ### View elder profile
@@ -216,8 +276,25 @@ POST /game/add_result
 - `score`
 - `time_start` YYYY-MM-DD HH:mm:SS; `Y-M-D H:i:s`; 
 - `time_end` YYYY-MM-DD HH:mm:SS; `Y-M-D H:i:s`; 
-- `mode`: "classic" or "unlimited" 
-- ?????? [list of photo_id + boolean value stating correct or not]
+- `mode`: "classic" or "unlimited"
+
+#### Return
+- `status`: 0 on success, -1 otherwise
+- `message`: array of success/error messages
+
+
+
+### Increase photo statistics
+
+```
+POST /game/inc_photo_stats
+```
+
+#### Parameters
+- `photo_id`
+- `option`:
+  - 0: increment number of appearance ONLY
+  - 1: increment number of appearance AND correctness
 
 #### Return
 - `status`: 0 on success, -1 otherwise

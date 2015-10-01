@@ -12,11 +12,8 @@ REQUEST /elder/view/[s:device_id]
 
 #### Return
 - `status`: 0 on success, -1 otherwise
-- `message`: array of success/error messages
+- `message`: array of success/error messages + including game statistics from elder
 
-
-#### Todo
-- incorporate game result here (some stats like when game is last played, average score, hi score in each mode)
 */
 $this->respond('/[s:device_id]', function ($request, $response, $service, $app) {
     $mysqli = $app->db;

@@ -1,6 +1,8 @@
 <?php
-/*
+/*! \file
+
 ### Reset password
+
 ```
 GET /user/reset/[s:password_token]
 ```
