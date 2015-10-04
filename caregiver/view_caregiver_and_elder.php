@@ -48,7 +48,7 @@ $this->respond('/[s:caregiver_device_id]', function ($request, $response, $servi
     
 
         $sql_query = "SELECT `user`.`device_id`, `user`.`name`, `user`.`attachment`
-            FROM `photo`, `take_care`, `user`, `user` AS `cuser`
+            FROM `take_care`, `user`, `user` AS `cuser`
             WHERE
                 `cuser`.`device_id` = ? AND
                 `take_care`.`user_id` = `user`.`id` AND
