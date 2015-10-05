@@ -60,7 +60,7 @@ $this->respond('/[s:caregiver_device_id]', function ($request, $response, $servi
         $stmt->store_result();
         $stmt->bind_result($device_id, $name, $attachment);
 
-        $result = [];
+        //$result = [];
         while ($stmt->fetch()) {
             array_push($result, array(
                 "device_id" => $device_id,
