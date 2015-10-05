@@ -28,14 +28,15 @@ $this->respond('/[s:caregiver_device_id]', function ($request, $response, $servi
     $user_id = $user_id_from_device_id($mysqli, $caregiver_device_id);
 
     if (is_empty($error_msg)) {
-        $sql_query = "SELECT `device_id`, `name`, `attachment`
-            FROM `user`
-            WHERE `device_id` = ?";
+        $sql_query = "SELECT `device_id`, `name`, `attachment`, `email`
+            FROM `user`, `caregiver`
+            WHERE `device_id` = ? AND
+                `user`.`id` = `caregiver`.`user_id`";
         $stmt = $mysqli->prepare($sql_query);
         $stmt->bind_param("i", $caregiver_device_id);
         $res = $stmt->execute();
         $stmt->store_result();
-        $stmt->bind_result($device_id, $name, $attachment);
+        $stmt->bind_result($device_id, $name, $attachment, $email);
 
         $result = [];
         $stmt->fetch();
@@ -43,7 +44,8 @@ $this->respond('/[s:caregiver_device_id]', function ($request, $response, $servi
         array_push($result, array(
             "device_id" => $device_id,
             "name" => $name,
-            "attachment" => $attachment
+            "attachment" => $attachment,
+            "email" => $email
         ));
     
 
