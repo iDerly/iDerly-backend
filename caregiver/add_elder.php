@@ -86,7 +86,7 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
                       VALUES(?, ?)";
         $stmt = $mysqli->prepare($sql_query);
         if ($stmt) {
-            $stmt->bind_param("ii", $caregiver_id, $elder_id);
+            $stmt->bind_param("ii", $caregiver_id, $user_id);
             $res = $stmt->execute();
             if ($res) {
                 $service->flash("Elder successfully added for the care of caregiver.", 'success');
