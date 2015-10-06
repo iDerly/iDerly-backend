@@ -82,7 +82,7 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
         $user_id = $user_id_from_device_id($mysqli, $caregiver_device_id);
         $caregiver_id = $user_id_from_device_id($mysqli, $caregiver_device_id);
         
-        $sql_query = "INSERT INTO take_care(`caregiver_device_id`, `elder_device_id`)
+        $sql_query = "INSERT INTO take_care(`caregiver_device_id`, `user_id`)
                       VALUES(?, ?)";
         $stmt = $mysqli->prepare($sql_query);
         if ($stmt) {
