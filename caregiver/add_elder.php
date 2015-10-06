@@ -59,7 +59,7 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
     $sql_query = "SELECT * FROM `take_care`, `caregiver`, `user`
         WHERE `take_care`.`caregiver_id` = `caregiver`.`user_id`
         AND `caregiver`.`user_id` = ?
-        AND `user_id` = `user`.`id`
+        AND `take_care`.`user_id` = `user`.`id`
         AND `user`.`id` = ?";
     $stmt = $mysqli->prepare($sql_query);
     if ($stmt) {
