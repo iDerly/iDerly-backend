@@ -73,7 +73,7 @@ $klein->respond(function ($request, $response, $service, $app) use ($klein) {
         return false;
     }
 
-    if (
+    /*if (
         // Authentication required for these actions:
         search_array($request->pathname(),
         array(
@@ -95,7 +95,7 @@ $klein->respond(function ($request, $response, $service, $app) use ($klein) {
             )
         , TRUE)
         // Besides these actions, error 404 Not Found or 405 Method Not Allowed are returned (by klein.php)
-        ) {
+        ) {*/
         // function session_is_registered($x) {return isset($_SESSION[$x]);}
         // Start session; only start session when required.
         if (!is_empty($request->param('session_id'))) {
@@ -114,7 +114,7 @@ $klein->respond(function ($request, $response, $service, $app) use ($klein) {
             echo json_encode($return);
             $response->send(); die();
         }
-    }
+    //}
         
     
     // Attachment folder
