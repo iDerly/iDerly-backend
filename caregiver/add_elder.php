@@ -79,7 +79,7 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
     if (is_empty($error_msg)) {
         // get caregiver_id
         // get user_id
-        $user_id = $user_id_from_device_id($mysqli, $caregiver_device_id);
+        $user_id = $user_id_from_device_id($mysqli, $elder_device_id);
         $caregiver_id = $user_id_from_device_id($mysqli, $caregiver_device_id);
         
         $sql_query = "INSERT INTO take_care(`caregiver_id`, `user_id`)
