@@ -33,12 +33,10 @@ $this->respond('/[s:caregiver_device_id]', function ($request, $response, $servi
             WHERE `device_id` = ? AND
                 `user`.`id` = `caregiver`.`user_id`";
         $stmt = $mysqli->prepare($sql_query);
-        $stmt->bind_param("i", $caregiver_device_id);
+        $stmt->bind_param("s", $caregiver_device_id);
         $res = $stmt->execute();
         $stmt->store_result();
         $stmt->bind_result($device_id, $name, $attachment, $email);
-        echo $device_id;
-        echo $attachment;
 
         $result = [];
         $stmt->fetch();
