@@ -37,6 +37,8 @@ $this->respond('/[s:caregiver_device_id]', function ($request, $response, $servi
         $res = $stmt->execute();
         $stmt->store_result();
         $stmt->bind_result($device_id, $name, $attachment, $email);
+        echo $device_id;
+        echo $attachment;
 
         $result = [];
         $stmt->fetch();
