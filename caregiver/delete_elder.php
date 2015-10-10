@@ -26,16 +26,18 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
     if (is_empty(trim($elder_device_id)))      $service->flash("Please enter your elder_device_id.", 'error');
     if (is_empty(trim($caregiver_device_id)))      $service->flash("Please enter your caregiver_device_id.", 'error');
 
+    // get caregiver_id
+    // get user_id
+    $caregiver_id = $user_id_from_device_id($mysqli, $caregiver_device_id);
+    $user_id = $user_id_from_device_id($mysqli, $elder_device_id);
 
     $num_rows = 0;
-    $sql_query = "SELECT * FROM `take_care`, `caregiver`, `user`
-        WHERE `caregiver_id` = `caregiver`.`user_id`
-        AND `caregiver`.`id` = ?
-        AND `user_id` = `user`.`id`
-        AND `user`.`id` = ?";
+    $sql_query = "SELECT * FROM `take_care`
+        WHERE `caregiver_id` = ?
+        AND `user_id` = ?";
     $stmt = $mysqli->prepare($sql_query);
     if ($stmt) {
-        $stmt->bind_param("ss", $caregiver_device_id, $elder_device_id);
+        $stmt->bind_param("ii", $caregiver_id, $user_id);
         $res = $stmt->execute();
 
         $stmt->store_result();
@@ -49,10 +51,6 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
     $error_msg = $service->flashes('error');
 
     if (is_empty($error_msg)) {
-        // get caregiver_id
-        // get user_id
-        $user_id = $user_id_from_device_id($mysqli, $caregiver_device_id);
-        $caregiver_id = $user_id_from_device_id($mysqli, $caregiver_device_id);
 
         $sql_query = "DELETE FROM `take_care` WHERE `caregiver_id` = ? AND `user_id` = ?";
         $stmt = $mysqli->prepare($sql_query);
