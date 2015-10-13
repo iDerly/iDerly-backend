@@ -27,7 +27,7 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
 
     // error checking
     if (is_empty(trim($photo_id)))    $service->flash("Please enter your photo_id.", 'error');
-    if (is_empty(trim($option)) || $option < 0 || $option > 1)    $service->flash("Please enter the option: 0: increment number of appearance ONLY, 1: increment number of appearance AND correctness.", 'error');
+    if ($option < 0 || $option > 1)    $service->flash("Please enter the option: 0: increment number of appearance ONLY, 1: increment number of appearance AND correctness.", 'error');
 
 
     $error_msg = $service->flashes('error');
