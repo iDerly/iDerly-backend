@@ -8,7 +8,7 @@ POST /elder/update_photo
 ```
 
 #### Parameters
-- `device_id`: who owns the photo
+- `photo_id`
 - `name`: name of person in photo (not user's name)
 - `remarks`: remarks of person in photo
 
@@ -19,13 +19,12 @@ POST /elder/update_photo
 */
 $this->respond('POST', '/?', function ($request, $response, $service, $app) {
     $mysqli = $app->db;
-    $user_id_from_device_id = $app->user_id_from_device_id;
-    $device_id = $mysqli->escape_string($request->param('device_id'));
+    $photo_id = $mysqli->escape_string($request->param('photo_id'));
     $name = $mysqli->escape_string($request->param('name'));
     $remarks = $mysqli->escape_string($request->param('remarks'));
 
     // error checking
-    if (is_empty(trim($device_id)))      $service->flash("Please enter your device_id.", 'error');
+    if (is_empty(trim($photo_id)))      $service->flash("Please enter your photo_id.", 'error');
     if (is_empty(trim($name)))      $service->flash("Please enter your subject's name.", 'error');
     if (is_empty(trim($remarks)))      $service->flash("Please enter your subject's remarks.", 'error');
 
@@ -33,15 +32,11 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
     $error_msg = $service->flashes('error');
 
     if (is_empty($error_msg)) {
-        // get user_id
-        $user_id = $user_id_from_device_id($mysqli, $device_id);
 
-
-
-        $sql_query = "UPDATE `photo` WHERE `user_id` = ? SET `name` = ?, `remarks` = ?";
+        $sql_query = "UPDATE `photo` WHERE `id` = ? SET `name` = ?, `remarks` = ?";
         $stmt = $mysqli->prepare($sql_query);
         if ($stmt) {
-            $stmt->bind_param("iss", $user_id, $name, $remarks);
+            $stmt->bind_param("iss", $photo_id, $name, $remarks);
             $res = $stmt->execute();
             if ($res) {
                 $service->flash("Photo details updated", 'success');
