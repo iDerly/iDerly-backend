@@ -33,10 +33,10 @@ $this->respond('POST', '/?', function ($request, $response, $service, $app) {
 
     if (is_empty($error_msg)) {
 
-        $sql_query = "UPDATE `photo` WHERE `id` = ? SET `name` = ?, `remarks` = ?";
+        $sql_query = "UPDATE `photo` SET `name` = ?, `remarks` = ? WHERE `id` = ?";
         $stmt = $mysqli->prepare($sql_query);
         if ($stmt) {
-            $stmt->bind_param("iss", $photo_id, $name, $remarks);
+            $stmt->bind_param("ssi", $name, $remarks, $photo_id);
             $res = $stmt->execute();
             if ($res) {
                 $service->flash("Photo details updated", 'success');

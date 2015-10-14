@@ -183,7 +183,7 @@ POST /elder/update_photo
 ```
 
 #### Parameters
-- `device_id`: who owns the photo
+- `photo_id`
 - `name`: name of person in photo (not user's name)
 - `remarks`: remarks of person in photo
 
